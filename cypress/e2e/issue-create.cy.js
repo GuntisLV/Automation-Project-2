@@ -63,30 +63,26 @@ describe('Issue create', () => {
     //System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       
-      //open issue type dropdown and choose Story
+      //open issue type dropdown and choose Bug
       cy.get('[data-testid="form-field:type"]').click();
       cy.get('[data-testid="select-option:Bug"]')
           .trigger('click');
             
-      //Type value to description input field
       cy.get('.ql-editor').type('My bug description');
 
-      //Type value to title input field
-      //Order of filling in the fields is first description, then title on purpose
-      //Otherwise filling title first sometimes doesn't work due to web page implementation
       cy.get('input[name="title"]').type('Bug');
       
-      //Select Lord Gaben from reporter dropdown
+      //Select Pickle Rick from reporter dropdown
       cy.get('[data-testid="select:userIds"]').click();
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
 
       //Click on button "Create issue"
       cy.get('button[type="submit"]').click();
       
-        //open issue type dropdown and choose Story
-        cy.get('[data-testid="select:priority"]').click();
-        cy.get('[data-testid="select-option:Highest"]')
-            .trigger('click');
+        
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Highest"]')
+          .trigger('click');
     });
 
     //Assert that modal window is closed and successful message is visible
@@ -114,18 +110,11 @@ describe('Issue create', () => {
 
   // Test 2
   it.only('Test 2 - Should create an issue and validate it successfully with random data', () => {
-    //System finds modal for creating issue and does next steps inside of it
+    // Generate random title and description using faker plugin
     const randomTitle = faker.word.sample();
     const randomDescription = faker.word.words(); 
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-
-
-      //Type value to description input field
       cy.get('.ql-editor').type(randomDescription);
-
-      //Type value to title input field
-      //Order of filling in the fields is first description, then title on purpose
-      //Otherwise filling title first sometimes doesn't work due to web page implementation
       cy.get('input[name="title"]').type(randomTitle);
       
       //Select Lord Gaben from reporter dropdown
@@ -135,10 +124,9 @@ describe('Issue create', () => {
       //Click on button "Create issue"
       cy.get('button[type="submit"]').click();
       
-        //open issue type dropdown and choose Story
-        cy.get('[data-testid="select:priority"]').click();
-        cy.get('[data-testid="select-option:Low"]')
-            .trigger('click');
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Low"]')
+          .trigger('click');
     });
 
     //Assert that modal window is closed and successful message is visible
