@@ -58,7 +58,7 @@ describe('Issue comments creating, editing and deleting', () => {
 
     });
 
-    it.only('Should create, edit and delete comment successfully 2', () => {
+    it('Should create, edit and delete comment successfully 2', () => {
         const COMMENT = 'This is a comment'
         const EDITED_COMMENT = 'This is an edited comment'
         getIssueDetailsModal().within(()=>{
