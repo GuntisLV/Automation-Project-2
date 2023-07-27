@@ -27,7 +27,7 @@ describe('Issue comments creating, editing and deleting', () => {
         });
     });
 
-    it.only('Should create,edit and delete comment successfully', () => {
+    it('Should create,edit and delete comment successfully', () => {
         const comment = 'TEST_COMMENT';
         const comment_edited = 'TEST_COMMENT_EDITED';
 
@@ -57,6 +57,75 @@ describe('Issue comments creating, editing and deleting', () => {
             getIssueDetailsModal().contains(comment_edited).should('not.exist');
 
     });
+
+    it.only('Should create, edit and delete comment successfully 2', () => {
+        const COMMENT = 'This is a comment'
+        const EDITED_COMMENT = 'This is an edited comment'
+        getIssueDetailsModal().within(()=>{
+            /** ADD */
+            // trigger the add a comment block with keydown
+            cy.contains('Add a comment...')
+                .trigger('keydown', { key: 'm', code: 'KeyM' })
+                .type(COMMENT);
+
+            pressButtonByText('Save');
+
+            // assert that comment has been added
+            doesCommentExistByText(COMMENT);
+
+
+            /** EDIT */
+            getFirstComment()
+                .within(()=>{
+                    cy.contains('Edit')
+                        .click()
+                        .should('not.exist');
+                    cy.get('textarea[placeholder="Add a comment..."]')
+                        .should('contain', COMMENT).clear().type(EDITED_COMMENT);
+                        
+                    pressButtonByText('Save');
+                });
+            
+            // assert that comment has been edited
+            doesCommentExistByText(EDITED_COMMENT);
+
+            /** DELETE */
+            getFirstComment()
+                .within(()=>{
+                    cy.contains('Delete')
+                        .should('exist')
+                        .click()
+                });
+        })
+        
+        cy.get('[data-testid="modal:confirm"]')
+            .contains('button', 'Delete comment')
+            .click()
+            .should('not.exist');
+        // assert that comment has been deleted
+        getIssueDetailsModal()
+            .contains(EDITED_COMMENT)
+            .should('not.exist');
+    })
+
+    // returns the first found comment
+    const getFirstComment = () => {
+        return cy.get('[data-testid="issue-comment"]')
+            .first();
+    }
+
+    // clicks on a button found by text
+    const pressButtonByText = (text) => {
+        cy.contains(text)
+            .should('exist')
+            .click()
+            .should('not.exist');
+    }
+
+    // checks if comment exists by text
+    const doesCommentExistByText = (comment) => {
+        cy.get('[data-testid="issue-comment"]').should('contain',comment);
+    }
 
     it('Should edit a comment successfully', () => {
         const previousComment = 'An old silent pond...';
