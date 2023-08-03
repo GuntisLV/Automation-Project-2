@@ -29,7 +29,7 @@ describe('Issue comments creating, editing and deleting', () => {
         });
     });
 
-    it.only('dadsdasd', () => {
+    it('Add, edit, remove time log', () => {
         const hours = '123';
         const hours2 = '145';
         const hours3 = '444';
